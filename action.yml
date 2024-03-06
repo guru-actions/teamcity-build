@@ -36,23 +36,25 @@ runs:
         # Specify the ID of the TeamCity project and the ID of the job to trigger
         PROJECT_ID="${{ inputs.jobid }}"
         
-        
+        printf "calling teamcity \n"
         # Trigger the job and capture the build ID
         BUILD_RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" -X POST "$TEAMCITY_URL/httpAuth/app/rest/buildQueue" \
         -H "Content-Type: application/xml" \
         -d "<build><buildType id=\"$PROJECT_ID\"/></build>" \
         --header "Accept: application/json")
-
+        printf "check response \n"
         # Check if there was an error in the response
         ERROR=$(echo "$BUILD_RESPONSE" | jq -r '.error')
         if [ "$ERROR" != "null" ]; then
         echo "Error triggering build: $ERROR"
         exit 1
         fi
-        
+
+        printf "extract build id \n"
         # Extract the build ID from the response
         BUILD_ID=$(echo "$BUILD_RESPONSE" | jq -r '.id')
         echo "Build id - $BUILD_ID"
+        printf "loop build \n"
         # Loop to wait for the job to finish
         while true; do
         # Check the status of the build
