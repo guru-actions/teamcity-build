@@ -37,9 +37,12 @@ runs:
         PROJECT_ID="${{ inputs.jobid }}"
         
         printf "calling teamcity \n"
+        printf "TEAMCITY_URL = $TEAMCITY_URL"
+        printf "USERNAME     = $USERNAME"
+        printf "PASSWORD     = $PASSWORD"
         # Trigger the job and capture the build ID
 
-        curl -s -u "$USERNAME:$PASSWORD" -X POST "$TEAMCITY_URL/httpAuth/app/rest/buildQueue" \
+        curl -s -u -v  "$USERNAME:$PASSWORD" -X POST "$TEAMCITY_URL/httpAuth/app/rest/buildQueue" \
         -H "Content-Type: application/xml" \
         -d "<build><buildType id=\"$PROJECT_ID\"/></build>" \
         --header "Accept: application/json"
