@@ -1,8 +1,8 @@
 ---
 apiVersion: automation.cloudbees.io/v1alpha1
 kind: action
-name: deploy helm chart
-description: deploys a helm chart using a standard repo
+name: run teamcity build
+description: runs a team city build
 inputs:
   serverurl:
     description: teamcity server url
@@ -25,6 +25,9 @@ runs:
       uses: docker://softonic/curl-jq:3.18.2-1
       shell: sh
       run: |
+
+        #!/bin/bash
+        printf "starting \n"
         # Set your TeamCity server URL, username, and password
         TEAMCITY_URL="${{ inputs.serverurl }}"
         USERNAME="${{ inputs.user }}"
