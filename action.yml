@@ -16,11 +16,17 @@ inputs:
   credential:
     description: credential to use
     required: true
-
+outputs:
+  buildnumber:
+    value: ${{ steps.run_build.outputs.BUILD_ID }}
+    description: build number
+  buildstatus:
+    value: ${{ steps.run_build.outputs.BUILD_STATUS }}
+    description: build status
 runs:
   using: composite
   steps:
-    - id: deploy_chart
+    - id: run_build
       name: Deploy Chart
       uses: docker://softonic/curl-jq:3.18.2-1
       shell: sh
@@ -90,3 +96,5 @@ runs:
 
         # Print the final status of the build
         echo "Build finished with status: $BUILD_STATUS"
+        echo "$BUILD_STATUS" >> $CLOUDBEES_OUTPUTS/BUILD_STATUS
+        echo "$BUILD_ID" >> $CLOUDBEES_OUTPUTS/BUILD_ID
