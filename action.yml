@@ -22,7 +22,7 @@ runs:
   steps:
     - id: deploy_chart
       name: Deploy Chart
-      uses: docker://itisfoundation/jq:v0
+      uses: docker://softonic/curl-jq:3.18.2-1
       shell: sh
       run: |
         # Set your TeamCity server URL, username, and password
