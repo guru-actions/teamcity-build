@@ -40,7 +40,7 @@ runs:
         -d "<build><buildType id=\"$PROJECT_ID\"/></build>" \
         --header "Accept: application/json")
 
-      # Check if there was an error in the response
+        # Check if there was an error in the response
         ERROR=$(echo "$BUILD_RESPONSE" | jq -r '.error')
         if [ "$ERROR" != "null" ]; then
         echo "Error triggering build: $ERROR"
