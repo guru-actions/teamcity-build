@@ -43,11 +43,7 @@ runs:
         printf "PROJECT_ID   = $PROJECT_ID\n"
         # Trigger the job and capture the build ID
 
-        curl -s -u -v  "$USERNAME:$PASSWORD" -X POST "$TEAMCITY_URL/httpAuth/app/rest/buildQueue" \
-        -H "Content-Type: application/xml" \
-        -d "<build><buildType id=\"$PROJECT_ID\"/></build>" \
-        --header "Accept: application/json"
-        
+    
         BUILD_RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" -X POST "$TEAMCITY_URL/httpAuth/app/rest/buildQueue" \
         -H "Content-Type: application/xml" \
         -d "<build><buildType id=\"$PROJECT_ID\"/></build>" \
@@ -69,7 +65,7 @@ runs:
         while true; do
         # Check the status of the build
         BUILD_RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" "$TEAMCITY_URL/httpAuth/app/rest/builds/id:$BUILD_ID" --header "Accept: application/json")
-        echo "buiold response - $BUILD_RESPONSE"
+        echo "build response - $BUILD_RESPONSE"
         CLEAN_RESPONSE=$(echo "$BUILD_RESPONSE" | tr -d '\000-\011\013\014\016-\037')
         # Check if there was an error in the response
         ERROR=$(echo "$CLEAN_RESPONSE" | jq -r '.error')
