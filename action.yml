@@ -38,6 +38,7 @@ runs:
         
         printf "calling teamcity \n"
         # Trigger the job and capture the build ID
+        printf "about to run curl -s -u $USERNAME:$PASSWORD -X POST "$TEAMCITY_URL/httpAuth/app/rest/buildQueue" -H Content-Type: application/xml -d "<build><buildType id=\$PROJECT_ID\"/></build> --header "Accept: application/json" 
         BUILD_RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" -X POST "$TEAMCITY_URL/httpAuth/app/rest/buildQueue" \
         -H "Content-Type: application/xml" \
         -d "<build><buildType id=\"$PROJECT_ID\"/></build>" \
