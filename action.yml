@@ -1,0 +1,81 @@
+---
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: action
+name: deploy helm chart
+description: deploys a helm chart using a standard repo
+inputs:
+  serverurl:
+    description: teamcity server url
+    required: true
+  jobid:
+    description: project job id
+    required: true
+  user:
+    description: user to authenticate
+    required: true
+  credential:
+    description: credential to use
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - id: deploy_chart
+      name: Deploy Chart
+      uses: docker://itisfoundation/jq:v0
+      shell: sh
+      run: |
+        # Set your TeamCity server URL, username, and password
+        TEAMCITY_URL="${{ inputs.serverurl }}"
+        USERNAME="${{ inputs.user }}"
+        PASSWORD="${{ inputs.credential }}"
+  
+        # Specify the ID of the TeamCity project and the ID of the job to trigger
+        PROJECT_ID="${{ inputs.jobid }}"
+        
+        
+        # Trigger the job and capture the build ID
+        BUILD_RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" -X POST "$TEAMCITY_URL/httpAuth/app/rest/buildQueue" \
+        -H "Content-Type: application/xml" \
+        -d "<build><buildType id=\"$PROJECT_ID\"/></build>" \
+        --header "Accept: application/json")
+
+      # Check if there was an error in the response
+        ERROR=$(echo "$BUILD_RESPONSE" | jq -r '.error')
+        if [ "$ERROR" != "null" ]; then
+        echo "Error triggering build: $ERROR"
+        exit 1
+        fi
+        
+        # Extract the build ID from the response
+        BUILD_ID=$(echo "$BUILD_RESPONSE" | jq -r '.id')
+        echo "Build id - $BUILD_ID"
+        # Loop to wait for the job to finish
+        while true; do
+        # Check the status of the build
+        BUILD_RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" "$TEAMCITY_URL/httpAuth/app/rest/builds/id:$BUILD_ID" --header "Accept: application/json")
+        echo "buiold response - $BUILD_RESPONSE"
+        CLEAN_RESPONSE=$(echo "$BUILD_RESPONSE" | tr -d '\000-\011\013\014\016-\037')
+        # Check if there was an error in the response
+        ERROR=$(echo "$CLEAN_RESPONSE" | jq -r '.error')
+        if [ "$ERROR" != "null" ]; then
+        echo "Error checking build status: $ERROR"
+        exit 1
+        fi
+        
+        # Extract the build status from the response
+        BUILD_STATUS=$(echo "$CLEAN_RESPONSE" | jq -r '.state')
+        echo "build status - $BUILD_STATUS"
+        # If the build is finished, break out of the loop
+        
+        if [ "$BUILD_STATUS" != "queued" ] && [ "$BUILD_STATUS" != "running" ]; then
+        break
+        fi
+        
+        
+        # Sleep for a few seconds before checking again
+        sleep 5
+        done
+
+        # Print the final status of the build
+        echo "Build finished with status: $BUILD_STATUS"
