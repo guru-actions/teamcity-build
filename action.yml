@@ -27,7 +27,7 @@ runs:
   using: composite
   steps:
     - id: run_build
-      name: Deploy Chart
+      name: Run TeamCity
       uses: docker://softonic/curl-jq:3.18.2-1
       shell: sh
       run: |
