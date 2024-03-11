@@ -33,6 +33,7 @@ runs:
       run: |
 
         #!/bin/bash
+        jq --version
         printf "starting \n"
         # Set your TeamCity server URL, username, and password
         TEAMCITY_URL="${{ inputs.serverurl }}"
