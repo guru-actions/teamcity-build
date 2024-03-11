@@ -32,7 +32,7 @@ runs:
       shell: sh
       run: |
 
-        #!/bin/bash
+        #!/usr/bin/env bash
         jq --version
         printf "starting \n"
         # Set your TeamCity server URL, username, and password
