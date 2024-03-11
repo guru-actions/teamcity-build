@@ -80,12 +80,12 @@ runs:
                     --header "Accept: application/json")
         logdebug "$RESPONSE\n"
         echo "checking json"
-        #if jq -e . >/dev/null 2>&1 <<<"$RESPONSE"; then
-        #    logdebug "Parsed JSON successfully"
-        #else
-        #    log "Error: $RESPONSE"
-        #    exit 9
-        #fi
+        if echo "$RESPONSE" | jq -e . &> /dev/null; then
+           logdebug "Parsed JSON successfully"
+        else
+            log "Error: $RESPONSE"
+            exit 9
+        fi
 
          echo "finished checking json"
         
