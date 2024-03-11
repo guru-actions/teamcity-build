@@ -28,7 +28,7 @@ runs:
   steps:
     - id: run_build
       name: Run TeamCity
-      uses: docker://softonic/curl-jq:3.18.2-1
+      uses: docker://gururepservice/curljq:latest
       shell: sh
       run: |
 
