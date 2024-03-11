@@ -102,7 +102,7 @@ runs:
             # Check if there was an error in the response
             
         
-            if jq -e . >/dev/null 2>&1 <<<"$BUILD_RESPONSE"; then
+           if echo "$BUILD_RESPONSE" | jq -e . &> /dev/null; then
               #echo "Parsed JSON successfully"
         
               ERROR=$(echo "$BUILD_RESPONSE" | jq -r '.error')
