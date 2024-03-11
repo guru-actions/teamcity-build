@@ -38,63 +38,96 @@ runs:
         TEAMCITY_URL="${{ inputs.serverurl }}"
         USERNAME="${{ inputs.user }}"
         PASSWORD="${{ inputs.credential }}"
-  
-        # Specify the ID of the TeamCity project and the ID of the job to trigger
-        PROJECT_ID="${{ inputs.jobid }}"
-        
-        printf "calling teamcity \n"
-        printf "TEAMCITY_URL = $TEAMCITY_URL\n"
-        printf "USERNAME     = $USERNAME\n"
-        printf "PASSWORD     = $PASSWORD\n"
-        printf "PROJECT_ID   = $PROJECT_ID\n"
-        # Trigger the job and capture the build ID
+        DEBUG="true"
+        BUILD_POLL_TIME=5
+        BRANCH_NAME="main"
+        logdebug() {
+        if [ "$DEBUG" = true ]; then
+          printf "DEBUG: $(date +%F_%H-%M-%S): $1\n"
+       
+          fi
+        }
 
+        log() {
     
-        BUILD_RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" -X POST "$TEAMCITY_URL/httpAuth/app/rest/buildQueue" \
-        -H "Content-Type: application/xml" \
-        -d "<build><buildType id=\"$PROJECT_ID\"/></build>" \
-        --header "Accept: application/json")
-        printf "check response \n"
-        # Check if there was an error in the response
-        ERROR=$(echo "$BUILD_RESPONSE" | jq -r '.error')
-        if [ "$ERROR" != "null" ]; then
-        echo "Error triggering build: $ERROR"
-        exit 1
+          printf "$(date +%F_%H-%M-%S): $1\n"
+         
+        }
+        # Specify the ID of the TeamCity project and the ID of the job to trigger
+        BUILD_CONFIG_ID="${{ inputs.jobid }}"
+        
+        # Specify the parameters to pass to the build configuration
+        PARAMETERS='{"p1":"foo1234"}'
+        
+        BUILD_REQUEST=$(cat <<EOF
+        {
+          "buildType": {
+            "id": "$BUILD_CONFIG_ID"
+          },
+          "branchName": "$BRANCH_NAME",
+          "properties": {
+            "property": $(echo "$PARAMETERS" | jq -r 'to_entries | map({name: .key, value: .value})')
+          }
+        }
+        EOF
+        )
+        
+        # Trigger the build by sending a POST request to the build queue endpoint
+        RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" -X POST "$TEAMCITY_URL/app/rest/buildQueue" \
+                    -H "Content-Type: application/json" \
+                    -d "$BUILD_REQUEST" \
+                    --header "Accept: application/json")
+        logdebug "$RESPONSE\n"
+        
+        if jq -e . >/dev/null 2>&1 <<<"$RESPONSE"; then
+            logdebug "Parsed JSON successfully"
+        else
+            log "Error: $RESPONSE"
+            exit 9
         fi
-
-        printf "extract build id \n"
+        
+        echo $RESPONSE |jq
         # Extract the build ID from the response
-        BUILD_ID=$(echo "$BUILD_RESPONSE" | jq -r '.id')
-        echo "Build id - $BUILD_ID"
-        printf "loop build \n"
-        # Loop to wait for the job to finish
+        BUILD_ID=$(echo "$RESPONSE" | jq -r '.id')
+        
+        # Print the build ID
+        log "Build triggered with ID: $BUILD_ID"
+        
         while true; do
-        # Check the status of the build
-        BUILD_RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" "$TEAMCITY_URL/httpAuth/app/rest/builds/id:$BUILD_ID" --header "Accept: application/json")
-        echo "build response - $BUILD_RESPONSE"
-        CLEAN_RESPONSE=$(echo "$BUILD_RESPONSE" | tr -d '\000-\011\013\014\016-\037')
-        # Check if there was an error in the response
-        ERROR=$(echo "$CLEAN_RESPONSE" | jq -r '.error')
-        if [ "$ERROR" != "null" ]; then
-        echo "Error checking build status: $ERROR"
-        exit 1
-        fi
+            # Check the status of the build
+            BUILD_RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" "$TEAMCITY_URL/httpAuth/app/rest/builds/id:$BUILD_ID" --header "Accept: application/json")
+            # Check if there was an error in the response
+            
         
-        # Extract the build status from the response
-        BUILD_STATUS=$(echo "$CLEAN_RESPONSE" | jq -r '.state')
-        echo "build status - $BUILD_STATUS"
-        # If the build is finished, break out of the loop
+            if jq -e . >/dev/null 2>&1 <<<"$BUILD_RESPONSE"; then
+              #echo "Parsed JSON successfully"
         
-        if [ "$BUILD_STATUS" != "queued" ] && [ "$BUILD_STATUS" != "running" ]; then
-        break
-        fi
+              ERROR=$(echo "$BUILD_RESPONSE" | jq -r '.error')
+              if [ "$ERROR" != "null" ]; then
+                log "Error checking build status: $ERROR"
+                exit 1
+              fi
+            else
+              log "Error: $BUILD_RESPONSE"
+              exit 1
+            fi
         
+            # Extract the build status from the response
+            BUILD_STATUS=$(echo "$BUILD_RESPONSE" | jq -r '.state')
+            log "build status - $BUILD_STATUS"
+            # If the build is finished, break out of the loop
+            
+            if [ "$BUILD_STATUS" != "queued" ] && [ "$BUILD_STATUS" != "running" ]; then
+                break
+            fi
         
-        # Sleep for a few seconds before checking again
-        sleep 5
+          
+            # Sleep for a few seconds before checking again
+            sleep $BUILD_POLL_TIME
         done
-
+        
         # Print the final status of the build
-        echo "Build finished with status: $BUILD_STATUS"
-        echo "$BUILD_STATUS" >> $CLOUDBEES_OUTPUTS/BUILD_STATUS
-        echo "$BUILD_ID" >> $CLOUDBEES_OUTPUTS/BUILD_ID
+        log "Build finished with status: $BUILD_STATUS"
+        
+        echo $BUILD_RESPONSE |jq
+        BUILD_STATUS=$(echo "$BUILD_RESPONSE" | jq -r '.state')
