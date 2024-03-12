@@ -24,7 +24,7 @@ inputs:
     default: 5
   branch:
     required: false
-    default: "main:
+    default: "main"
 outputs:
   buildnumber:
     value: ${{ steps.run_build.outputs.BUILD_ID }}
