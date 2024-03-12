@@ -39,7 +39,7 @@ runs:
         TEAMCITY_URL="${{ inputs.serverurl }}"
         USERNAME="${{ inputs.user }}"
         PASSWORD="${{ inputs.credential }}"
-        DEBUG="true"
+        DEBUG="false"
         BUILD_POLL_TIME=5
         BRANCH_NAME="main"
         logdebug() {
@@ -132,5 +132,5 @@ runs:
         # Print the final status of the build
         log "Build finished with status: $BUILD_STATUS"
         
-        echo $BUILD_RESPONSE |jq
+        #echo $BUILD_RESPONSE |jq
         BUILD_STATUS=$(echo "$BUILD_RESPONSE" | jq -r '.state')
