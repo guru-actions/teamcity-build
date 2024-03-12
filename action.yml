@@ -27,7 +27,7 @@ inputs:
     default: "main"
   buildparms:
     required: false
-    default: '{"p1":"foo1234"}'
+    default: "{"p1":"foo1234"}"
 outputs:
   buildnumber:
     value: ${{ steps.run_build.outputs.BUILD_ID }}
