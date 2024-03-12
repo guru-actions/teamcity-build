@@ -21,8 +21,7 @@ inputs:
     default: "false"
   build_poll_time:
     required: false
-    type: integer
-    default: 5
+    default: "5"
   branch:
     required: false
     default: "main"
