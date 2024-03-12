@@ -70,7 +70,7 @@ runs:
         BUILD_CONFIG_ID="${{ inputs.jobid }}"
         
         # Specify the parameters to pass to the build configuration
-        PARAMETERS="${{ inputs.parms }}"
+        PARAMETERS="'${{ inputs.parms }}'"
 
         echo $PARAMETERS
         
