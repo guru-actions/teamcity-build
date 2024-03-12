@@ -16,6 +16,9 @@ inputs:
   credential:
     description: credential to use
     required: true
+  debug:
+    required: true
+    default: "false"
 outputs:
   buildnumber:
     value: ${{ steps.run_build.outputs.BUILD_ID }}
@@ -39,7 +42,7 @@ runs:
         TEAMCITY_URL="${{ inputs.serverurl }}"
         USERNAME="${{ inputs.user }}"
         PASSWORD="${{ inputs.credential }}"
-        DEBUG="false"
+        DEBUG="${{ inputs.debug }}"
         BUILD_POLL_TIME=5
         BRANCH_NAME="main"
         logdebug() {
