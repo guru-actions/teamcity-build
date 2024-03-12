@@ -71,6 +71,8 @@ runs:
         
         # Specify the parameters to pass to the build configuration
         PARAMETERS="${{ inputs.parms }}"
+
+        logdebug "$PARAMETERS"
         
         BUILD_REQUEST=$(cat <<EOF
         {
