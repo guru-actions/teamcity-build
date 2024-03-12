@@ -94,6 +94,7 @@ runs:
                     -H "Content-Type: application/json" \
                     -d "$BUILD_REQUEST" \
                     --header "Accept: application/json")
+        echo "$BUILD_REQUEST"
         logdebug "$RESPONSE\n"
         logdebug "checking json"
         if echo "$RESPONSE" | jq -e . &> /dev/null; then
