@@ -79,7 +79,7 @@ runs:
                     -d "$BUILD_REQUEST" \
                     --header "Accept: application/json")
         logdebug "$RESPONSE\n"
-        echo "checking json"
+        logdebug "checking json"
         if echo "$RESPONSE" | jq -e . &> /dev/null; then
            logdebug "Parsed JSON successfully"
         else
@@ -87,7 +87,7 @@ runs:
             exit 9
         fi
 
-         echo "finished checking json"
+         logdebug "finished checking json"
         
         echo $RESPONSE |jq
         # Extract the build ID from the response
@@ -130,12 +130,12 @@ runs:
         done
         
         # Print the final status of the build
-        echo "Build finished with status: $BUILD_STATUS"
+        log "Build finished with status: $BUILD_STATUS"
         
         #echo $BUILD_RESPONSE |jq
         #BUILD_STATUS=$(echo "$BUILD_RESPONSE" | jq -r '.state')
 
         # Print the final status of the build
-        echo "Build finished with status: $BUILD_STATUS"
+        
         echo "$BUILD_STATUS" >> $CLOUDBEES_OUTPUTS/BUILD_STATUS
         echo "$BUILD_ID" >> $CLOUDBEES_OUTPUTS/BUILD_ID
