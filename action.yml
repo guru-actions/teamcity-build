@@ -25,7 +25,7 @@ inputs:
   branch:
     required: false
     default: "main"
-  parmsx:
+  buildparms:
     required: false
     default: '{}'
 outputs:
@@ -70,7 +70,7 @@ runs:
         BUILD_CONFIG_ID="${{ inputs.jobid }}"
         
         # Specify the parameters to pass to the build configuration
-        PARAMETERS="'${{ inputs.parmsx }}'"
+        PARAMETERS="${{ inputs.buildparms }}"
 
         echo $PARAMETERS
         
