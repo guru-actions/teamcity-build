@@ -117,7 +117,7 @@ runs:
               log "Error: $BUILD_RESPONSE"
               exit 1
             fi
-        
+            logdebug "build response $BUILD_RESPONSE"
             # Extract the build status from the response
             BUILD_STATUS=$(echo "$BUILD_RESPONSE" | jq -r '.state')
             log "build status - $BUILD_STATUS"
