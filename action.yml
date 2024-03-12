@@ -25,6 +25,9 @@ inputs:
   branch:
     required: false
     default: "main"
+  parms:
+    required: false
+    default: '{}'
 outputs:
   buildnumber:
     value: ${{ steps.run_build.outputs.BUILD_ID }}
@@ -67,7 +70,7 @@ runs:
         BUILD_CONFIG_ID="${{ inputs.jobid }}"
         
         # Specify the parameters to pass to the build configuration
-        PARAMETERS='{"p1":"foo1234"}'
+        PARAMETERS="${{ inputs.parms }}"
         
         BUILD_REQUEST=$(cat <<EOF
         {
