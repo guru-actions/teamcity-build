@@ -130,7 +130,7 @@ runs:
         done
         
         # Print the final status of the build
-        log "Build finished with status: $BUILD_STATUS"
+        echo "Build finished with status: $BUILD_STATUS"
         
         #echo $BUILD_RESPONSE |jq
         BUILD_STATUS=$(echo "$BUILD_RESPONSE" | jq -r '.state')
