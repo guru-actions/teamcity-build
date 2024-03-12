@@ -47,6 +47,7 @@ runs:
         #!/usr/bin/env bash
         jq --version
         printf "starting \n"
+        printf "$build_poll_time\n"
         # Set your TeamCity server URL, username, and password
         TEAMCITY_URL="${{ inputs.serverurl }}"
         USERNAME="${{ inputs.user }}"
