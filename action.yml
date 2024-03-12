@@ -54,8 +54,9 @@ runs:
         PASSWORD="${{ inputs.credential }}"
         DEBUG="${{ inputs.debug }}"
         BUILD_POLL_TIME="${{ inputs.build_poll_time }}"
-        BRANCH_NAME="$BUILD_POLL_TIME"
-        printf "$build_poll_time\n"
+        BRANCH_NAME="${{ inputs.branch }}"
+        PARMSX="${{ inputs.buildparms }}"
+        printf "PARMSX\n"
         logdebug() {
         if [ "$DEBUG" = true ]; then
           printf "DEBUG: $(date +%F_%H-%M-%S): $1\n"
