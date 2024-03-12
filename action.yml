@@ -133,4 +133,9 @@ runs:
         echo "Build finished with status: $BUILD_STATUS"
         
         #echo $BUILD_RESPONSE |jq
-        BUILD_STATUS=$(echo "$BUILD_RESPONSE" | jq -r '.state')
+        #BUILD_STATUS=$(echo "$BUILD_RESPONSE" | jq -r '.state')
+
+        # Print the final status of the build
+        echo "Build finished with status: $BUILD_STATUS"
+        echo "$BUILD_STATUS" >> $CLOUDBEES_OUTPUTS/BUILD_STATUS
+        echo "$BUILD_ID" >> $CLOUDBEES_OUTPUTS/BUILD_ID
