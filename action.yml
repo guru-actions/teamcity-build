@@ -86,6 +86,8 @@ runs:
         }
         EOF
         )
+
+        echo $BUILD_REQUEST
         
         # Trigger the build by sending a POST request to the build queue endpoint
         RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" -X POST "$TEAMCITY_URL/app/rest/buildQueue" \
