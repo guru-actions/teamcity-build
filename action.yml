@@ -17,8 +17,14 @@ inputs:
     description: credential to use
     required: true
   debug:
-    required: true
+    required: false
     default: "false"
+  build_poll_time:
+    required: false
+    default: 5
+  branch:
+    required: false
+    default: "main:
 outputs:
   buildnumber:
     value: ${{ steps.run_build.outputs.BUILD_ID }}
@@ -43,8 +49,8 @@ runs:
         USERNAME="${{ inputs.user }}"
         PASSWORD="${{ inputs.credential }}"
         DEBUG="${{ inputs.debug }}"
-        BUILD_POLL_TIME=5
-        BRANCH_NAME="main"
+        BUILD_POLL_TIME="${{ inputs.build_poll_time }}"
+        BRANCH_NAME="${{ inputs.branch }}"
         logdebug() {
         if [ "$DEBUG" = true ]; then
           printf "DEBUG: $(date +%F_%H-%M-%S): $1\n"
