@@ -72,7 +72,7 @@ runs:
         # Specify the parameters to pass to the build configuration
         PARAMETERS="${{ inputs.parms }}"
 
-        logdebug "$PARAMETERS"
+        echo $PARAMETERS
         
         BUILD_REQUEST=$(cat <<EOF
         {
