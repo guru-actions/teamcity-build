@@ -57,6 +57,7 @@ runs:
         BRANCH_NAME="${{ inputs.branch }}"
         PARMSX="${{ inputs.buildparms }}"
         printf "$PARMSX\n"
+        printf "$BUILD_POLL_TIME\n"
         logdebug() {
         if [ "$DEBUG" = true ]; then
           printf "DEBUG: $(date +%F_%H-%M-%S): $1\n"
