@@ -68,6 +68,7 @@
 | String
 | build status of teamcity build
 
+|===
 
 
 == Usage example
