@@ -48,10 +48,6 @@
 | params to pass to build
 
 
-* An link:https://helm.sh/docs/topics/registries/[OCI-based] chart URL. 
-* A local chart in TGZ archive format.
-* An unpacked local chart directory.
-
 |===
 
 == Usage example
