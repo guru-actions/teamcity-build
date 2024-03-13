@@ -77,10 +77,16 @@ In your YAML file, add:
 
 [source,yaml]
 ----
-      - name: Install Helm chart
-        uses: cloudbees-io/helm-install@v1
+      - uses: guru-actions/teamcity-build@1.48
+        name: run teamcity
+        kind: build
+        id: runtc
         with:
-          release-name: nginx
-          chart-location: oci://ghcr.io/nginxinc/charts/nginx-ingress
+          serverurl: ${{ vars.teamcity_url }}
+          jobid: ${{ vars.teamcity_jobid }}
+          user: ${{ vars.teamcity_user }}
+          credential: ${{ secrets.teamcity_cred }}
+          debug: "true"
+          buildparms: '{\"p1\":\"foo\"}'
 
 ----
