@@ -17,10 +17,36 @@
 | server host name with port 
 
 
-| `chart-location`
+| `user`
 | String
 | Yes
-| The Helm chart location, which is one of:
+| id of the job in teamcity
+
+| `credential`
+| String
+| Yes
+| id of the job in teamcity
+
+| `debug`
+| String
+| Yes
+| id of the job in teamcity
+
+| `build_poll_time`
+| String
+| Yes
+| id of the job in teamcity
+
+| `branch`
+| String
+| Yes
+| id of the job in teamcity
+
+| `buildparms`
+| String
+| Yes
+| id of the job in teamcity
+
 
 * An link:https://helm.sh/docs/topics/registries/[OCI-based] chart URL. 
 * A local chart in TGZ archive format.
