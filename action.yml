@@ -27,7 +27,7 @@ inputs:
     default: "main"
   buildparms:
     required: false
-    default: '"p1":"foo1234"'
+    default: "{}"
 outputs:
   buildnumber:
     value: ${{ steps.run_build.outputs.BUILD_ID }}
@@ -55,8 +55,6 @@ runs:
         DEBUG="${{ inputs.debug }}"
         BUILD_POLL_TIME="${{ inputs.build_poll_time }}"
         BRANCH_NAME="${{ inputs.branch }}"
-        PARMSX="${{ inputs.buildparms }}"
-        printf "$PARMSX\n"
         printf "$BUILD_POLL_TIME\n"
         logdebug() {
         if [ "$DEBUG" = true ]; then
