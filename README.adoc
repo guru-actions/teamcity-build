@@ -11,10 +11,10 @@
 | Required?
 | Description
 
-| `release-name`
+| `serverurl`
 | String
 | Yes
-| The Helm release name.
+| server host name with port 
 
 
 | `chart-location`
