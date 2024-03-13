@@ -53,13 +53,20 @@
 == Outputs
 
 [cols="2a,1a,1a,3a",options="header"]
-.Input details
+.Output details
 |===
 
-| Input name
+| Output name
 | Data type
-| Required?
 | Description
+
+| `buildnumber`
+| String
+| build number of teamcity build
+
+| `buildstatus`
+| String
+| build status of teamcity build
 
 == Usage example
 
