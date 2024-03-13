@@ -25,27 +25,27 @@
 | `credential`
 | String
 | Yes
-| id of the job in teamcity
+| credential to connect to server
 
 | `debug`
 | String
-| Yes
-| id of the job in teamcity
+| No
+| turn on debug
 
 | `build_poll_time`
 | String
-| Yes
-| id of the job in teamcity
+| No
+| how long to wait before each attempot to get build status in seconds (default=5 seconds)
 
 | `branch`
 | String
-| Yes
-| id of the job in teamcity
+| No
+| branch to build (default=main)
 
 | `buildparms`
 | String
-| Yes
-| id of the job in teamcity
+| No
+| params to pass to build
 
 
 * An link:https://helm.sh/docs/topics/registries/[OCI-based] chart URL. 
