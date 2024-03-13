@@ -41,13 +41,3 @@ In your YAML file, add:
           chart-location: oci://ghcr.io/nginxinc/charts/nginx-ingress
 
 ----
-
-== License
-
-This code is made available under the 
-link:https://opensource.org/license/mit/[MIT license].
-
-== References
-
-* Learn more about link:https://docs.cloudbees.com/docs/cloudbees-saas-platform-actions/latest/[using actions in CloudBees workflows].
-* Learn about link:https://docs.cloudbees.com/docs/cloudbees-saas-platform/latest/[the CloudBees platform].
