@@ -68,6 +68,8 @@
 | String
 | build status of teamcity build
 
+
+
 == Usage example
 
 In your YAML file, add:
