@@ -50,6 +50,17 @@
 
 |===
 
+== Outputs
+
+[cols="2a,1a,1a,3a",options="header"]
+.Input details
+|===
+
+| Input name
+| Data type
+| Required?
+| Description
+
 == Usage example
 
 In your YAML file, add:
